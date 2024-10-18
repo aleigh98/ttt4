@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+
+    <style type="text/css">
+        .board {width: 350px; margin: 0 auto;}
+        .square {height:100px; width:100px; display:inline-block; border: 1px solid; margin: 3px;}
+        h1 {text-align: center; margin-bottom: 20px; font-size: 60px}
+        .square:hover {background-color: #cec0c0; opacity: .2;}
+        #turn {font-size: 40px; margin: 0 auto; margin-bottom: 30px; text-align: center; border: 2px solid; margin-top: 20 auto; max-width: 350px;}
+        #result {font-size: 40px; margin: 0 auto; margin-top: 20px; text-align: center; border: 2px solid; max-width: 310px}
+        .piece {font-size: 90px; text-align: center; padding: 0px;}
+        .piece input {height:100px; width: 100px; margin: 0px; padding: 0px; display: block; font-size: 90px;}
+        #start {font-size: 40px; margin: 0 auto; margin-bottom: 30px; text-align: center; border: 2px solid; margin-top: 20 auto; max-width: 350px;}
+    </style>
+
+    <script>
+        function randInt(range) {
+            return Math.floor(Math.random() * range)
+        
+        }
+        function checkWin() {
+            for (i=0; i<8; i++) {
+                if (winConditions[i] == "XXX" || winConditions[i] == "OOO") {
+                    document.getElementById("r").innerHTML = "<div id='result'> Player "+winConditions[i][0]+" Wins! </div>"
+                    document.getElementById('turn').innerHTML = "Press Start Game"
+                    plays = []
+                    plays.push("Win")
+                    return
+                } 
+                staleMate = true
+                if (plays.length < 9) {
+                    staleMate = false
+                }
+                if (staleMate) {
+                    document.getElementById("r").innerHTML = "<div id='result'>StaleMate</div>"
+                    document.getElementById('turn').innerHTML = "Press Start Game"
+                }
+                
+            }
+        }
+        
+        function calcWin() {
+            winConditions = []
+            // top cross
+            str = ""
+            str = moves[0] + moves[1] + moves[2]
+            winConditions.push(str)
+            // mid cross
+            str = ""
+            str = moves[3] + moves[4] + moves[5]
+            winConditions.push(str)
+            // bot cross
+            str = ""
+            str = moves[6] + moves[7] + moves[8]
+            winConditions.push(str)
+
+            // left down
+            str = ""
+            str = moves[0] + moves[3] + moves[6]
+            winConditions.push(str)
+            // mid down
+            str = ""
+            str = moves[1] + moves[4] + moves[7]
+            winConditions.push(str)
+            // right down
+            str = ""
+            str = moves[2] + moves[5] + moves[8]
+            winConditions.push(str)
+
+            // tlbr cross
+            str = ""
+            str = moves[0] + moves[4] + moves[8]
+            winConditions.push(str)
+            // bltr cross
+            str = ""
+            str = moves[6] + moves[4] + moves[2]
+            winConditions.push(str)
+            
+            checkWin()
+        }
+
+        function placePiece() {
+            if (plays.includes(this.id)) {
+                alert("Not a valid move")
+            } else if (plays[0] == "Win") {
+                alert("Restart Game")
+            } else {
+                if (num%2 == 0) {
+                    piece = "X"
+                    opp_piece = "O"
+                    num++
+                } else {
+                    piece = "O"
+                    opp_piece = "X"
+                    num++
+                }
+                moves[Number(this.id[2])] = piece
+                document.getElementById(this.id).innerHTML = "<div class='piece'><input type='button' value='"+piece+"'></div>"
+                document.getElementById('turn').innerText = "Player "+opp_piece+"'s Turn"
+                plays.push(this.id)
+                x = 0
+                calcWin()
+            }         
+        }
+
+        function resetBoard() {
+            for (i = 0; i <9; i++) {
+                id="sq"+i
+                document.getElementById(id).innerHTML = "<div class='piece'><input type='button' value='&nbsp;'></div>"
+            }
+            plays = []
+            num=randInt(100)
+            if (num%2 == 0) {
+                piece = "X"
+            } else {
+                piece = "O"
+            }
+            document.getElementById('turn').innerHTML = "Player "+piece+"'s Turn"
+            moves = []
+            squares.forEach((item)=>moves.push("-"))
+            document.getElementById("r").innerHTML = "&nbsp;"
+
+        }
+
+        window.onload = function() {
+            for (i = 0; i < 9; i++) {
+                id="sq"+i
+                btn = document.getElementById(id)
+                btn.onclick = placePiece  
+            }
+            reset = document.getElementById('reset')
+            reset.onclick = resetBoard
+
+            num=randInt(100)
+            plays = []
+            if (num%2 == 0) {
+                piece = "X"
+            } else {
+                piece = "O"
+            }
+            document.getElementById('turn').innerHTML = "Player "+piece+"'s Turn"
+            squares = [0,1,2,3,4,5,6,7,8]
+            moves = []
+            squares.forEach((item)=>moves.push("-"))
+        }
+
+    </script>
+</head>
+
+<body>
+
+    <h1>Tic Tac Toe</h1>
+        <script>
+            document.write("<div id='turn'></div>")
+            document.write("<div id='start'><input type='button' value='Start Game' id='reset'>")
+        </script>
+
+    <div class="board">
+        <script>
+            const NUM_SQUARES = 9
+            for (i=0; i < NUM_SQUARES; i++) {
+                id = "sq"+i
+                document.write("<div class='square' id='"+ id + "'></div>")
+            }
+            document.write("</br>&nbsp;")
+            document.write("</div>")
+        </script>
+    </div>
+    <div id="r">
+        &nbsp;
+    </div>
+
+    <script>
+        for (i=0; i < NUM_SQUARES; i++) {
+            id="sq"+i
+            document.getElementById(id).innerHTML = "<div class='piece'><input type='button' value='&nbsp;' id='"+id+"''></div>"
+        }
+    </script>
+    
+</body>
+
+
+
+</html>
